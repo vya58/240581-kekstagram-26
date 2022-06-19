@@ -29,9 +29,9 @@ function returnRandomInteger(minNumber, maxNumber) {
 * @return {boolean} true, если строка проходит по длине, и false — если не проходит
 */
 function getStringLength(string, maxLength) {
-  maxLength = parseInt(maxLength, 10);
+  const max = Number(maxLength);
 
-  if (string.length > maxLength) {
+  if (string.length > max) {
     return false;
   }
 
