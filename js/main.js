@@ -4,26 +4,14 @@
 * Использован метод, изложенный здесь: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 * @param {number} min Число, задающее начало диапазона
 * @param {number} max Число, задающее конец диапазона
-* @return {number/string} случайное целое число из переданного диапазона или сообщение об ошибке
+* @return {number/undefined} случайное целое число из переданного диапазона или undefined
 */
-function returnRandomInteger(min, max) {
-  min = parseInt(min, 10);
-  max = parseInt(max, 10);
+function returnRandomInteger(minNumber, maxNumber) {
+  let min = Number(minNumber);
+  let max = Number(maxNumber);
 
-  if (isNaN(min)) {
-    return 'Начало диапазона должно быть задано числом';
-  }
-
-  if (isNaN(max)) {
-    return 'Конец диапазона должен быть задан числом';
-  }
-
-  if (min === max) {
-    return 'Начальное число диапазона равно конечному';
-  }
-
-  if (min < 0 || max < 0) {
-    return 'Диапазон может быть только положительный';
+  if (isNaN(min) || isNaN(max) || min === max || min < 0 || max < 0) {
+    return undefined;
   }
 
   if (min > max) {
