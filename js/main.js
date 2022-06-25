@@ -156,7 +156,7 @@ function createFoto() {
   };
 }
 
-const fotos = Array.from({length: FOTOS_COUNT}, createFoto);
+const fotos = Array.from({ length: FOTOS_COUNT }, createFoto);
 
 // Временный вызов функций, чтобы ESLint не выводил ошибки о неиспользуемой функции
 getRandomPositiveInteger();
