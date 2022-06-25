@@ -146,13 +146,18 @@ function createMessage(autors, comments) {
 */
 function createFoto() {
   const fotoId = getNextValue(ids);
+  const commentsCount = getRandomPositiveInteger(1, 20);
+  const messages = [];
+  for (let i = 0; i < commentsCount; i++) {
+    messages.push(createMessage(AUTORS, KOMMENTS));
+  }
 
   return {
     id: fotoId,
     url: `photos/${fotoId}.jpg`,
     description: `Описание фотографии ${fotoId}`,
     likes: getRandomPositiveInteger(15, 200),
-    message: createMessage(AUTORS, KOMMENTS)
+    message: messages
   };
 }
 
