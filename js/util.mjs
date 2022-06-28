@@ -70,5 +70,6 @@ function getNextValue(array) {
 
 // Временный вызов функций, чтобы ESLint не выводил ошибки о неиспользуемой функции
 getRandomPositiveInteger();
+checkStringLength('gg', 6);
 
 export {getRandomPositiveInteger, getUniqueRangeValue, getNextValue};
