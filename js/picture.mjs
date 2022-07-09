@@ -2,7 +2,7 @@ import { createFotos } from './data.mjs';
 
 // Создаём блок-контейнер для фотоминиатюр, пустой DocumentFragment и получаем шаблон миниатюр
 const picturesContainer = document.querySelector('.pictures');
-const pictureыListFragment = document.createDocumentFragment();
+const picturesListFragment = document.createDocumentFragment();
 const pictureTemplate = document.querySelector('#picture').content;
 
 // Генерируем набор объектов фотографий с атрибутами
@@ -16,8 +16,8 @@ pictures.forEach((picture) => {
   clonePicture.querySelector('.picture__comments').textContent = picture.message.length;
   clonePicture.querySelector('.picture__likes').textContent = picture.likes;
 
-  pictureыListFragment.appendChild(clonePicture);
+  picturesListFragment.appendChild(clonePicture);
 });
 
 // Вставляем полученную коллекцию фотоминиатюр в блок-контейнер '.pictures'
-picturesContainer.append(pictureыListFragment);
+picturesContainer.append(picturesListFragment);
