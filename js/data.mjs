@@ -49,8 +49,9 @@ const сommentIds = [];
 const ids = [];
 
 /* Функция создания объекта 'комментарий к фотографии'
-* @param {array} autorsArray - Массив авторов комментариев
-* @param {array} commentsArray - Массив с комментариями
+* @param {number} idFoto id комментируемой фотографии
+* @param {array} autors - Массив авторов комментариев
+* @param {array} comments - Массив с комментариями
 *
 * @return {obgect} объект 'комментарий к фотографии'
 */
@@ -73,8 +74,6 @@ function createMessage(autors, comments) {
 }
 
 /* Функция создания объекта 'фотография'
-* @param {array} autorsArray - Массив авторов комментариев
-* @param {array} commentsArray - Массив с комментариями
 *
 * @return {obgect} объект с 'фотография'
 */
