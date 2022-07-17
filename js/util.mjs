@@ -94,7 +94,6 @@ function getPartString(dissectString, initialString, closingString) {
   for (let i = 0; i < delta; i++) {
     partString += dissectString.charAt(firstIndex + initialStringLength + i);
   }
-
   return partString;
 }
 
@@ -117,11 +116,10 @@ function closeByEscKeydown(closingFunction, evt) {
 */
 function getCountSymbol(str, symbol) {
   let count = 0;
-  let pos = str.indexOf(symbol);
-
-  while (pos !== -1) {
-    count++;
-    pos = str.indexOf(symbol, pos + 1);
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === symbol) {
+      count++;
+    }
   }
   return count;
 }
