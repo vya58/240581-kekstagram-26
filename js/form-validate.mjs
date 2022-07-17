@@ -14,20 +14,26 @@ function validateHashTagCharacter(value) {
   const array = value.split(' ');
   let result = false;
 
-  for (const element of array) {
+  for (let i = 0; i < array.length; i++) {
     // Проверка количества символов # в отдельном хэш-теге
     const symbol = '#';
-    const countHashTags = getCountSymbol(element, symbol);
+    const countHashTags = getCountSymbol(array[i], symbol);
 
     // Отказ в валидации, если символ # в отдельном хэш-теге не один или хэш-тег состоит только из этого символа
-    if (countHashTags > 1 || element.length === 1) {
+    // Перед этим проверяется, что поле не пустое
+    if (array[i] === '' && i === 0) {
+      result = true;
+    } else if (countHashTags !== 1 || array[i].length === 1) {
       return false;
     }
 
     // Проверка поля ввода на пустоту и на допустимые символы согласно регулярному выражению
-    if (element === '' || re.test(element)) {
+    if (array[i] === '' || re.test(array[i])) {
       result = true;
+    } else {
+      return false;
     }
+
   }
 
   return result;

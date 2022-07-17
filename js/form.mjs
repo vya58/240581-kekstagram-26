@@ -12,7 +12,6 @@ const imgUploadPreview = document.querySelector('.img-upload__preview > img');
 // Функция открытия формы
 function openForm() {
   imageUploadOverlay.classList.remove('hidden');
-
   document.body.classList.add('modal-open');
 }
 
