@@ -20,7 +20,6 @@ pictures.forEach((picture) => {
   clonePicture.querySelector('.picture__likes').textContent = picture.likes;
 
   picturesListFragment.appendChild(clonePicture);
-
   // Наполняем массив с комментариями к фотографиям
   messages.push(picture.message);
 });
@@ -28,4 +27,4 @@ pictures.forEach((picture) => {
 // Вставляем полученную коллекцию фотоминиатюр в блок-контейнер '.pictures'
 picturesContainer.append(picturesListFragment);
 
-export { messages };
+export { pictures };
