@@ -9,6 +9,7 @@ const bigPictureCancel = bigPicture.querySelector('#picture-cancel');
 const bigPictureSrc = bigPicture.querySelector('.big-picture__img > img');
 const bigPictureDescription = bigPicture.querySelector('.social__caption');
 const bigPictureLikes = bigPicture.querySelector('.likes-count');
+const socialCommentCountFirstSpan = bigPicture.querySelector('.social__comment-count').firstChild;
 const bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
 const picturesContainer = document.querySelector('.pictures');
 const comentsAddButton = bigPicture.querySelector('.social__comments-loader');
@@ -18,7 +19,6 @@ const MAX_COUNT_COMMENT_SHOW = 5;
 const ADD_COUNT_SHOW = 5;
 
 // Элементы комментариев к изображению
-const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const commentsBlock = bigPicture.querySelector('.social__comments');
 const commentBlock = bigPicture.querySelectorAll('.social__comment');
 
@@ -65,7 +65,7 @@ function addСomments() {
   openComments += add;
 
   // Изменяем число показанных комментариев в блоке '.social__comment-count'
-  socialCommentCount.textContent = `${openComments} из ${bigPictureCommentsCount.textContent} комментариев`;
+  socialCommentCountFirstSpan.textContent = `${openComments} из `;
 }
 
 // Функция получения порядкового номера элемента массива объектов фотоминиатюр по её id
@@ -102,8 +102,8 @@ function generateBlockFragment(arrayComments) {
   commentsBlock.append(commentsBlockFragment);
 }
 
-// Обработчик событий на коллекци фотоминиатюр
-const onListClick = function (evt) {
+// Обработчик событий на коллекции фотоминиатюр
+function onListClick(evt) {
   if (evt.target.matches('.picture__img')) {
     const target = evt.target;
 
@@ -133,13 +133,13 @@ const onListClick = function (evt) {
     bigPictureCommentsCount.textContent = target.nextElementSibling.querySelector('.picture__comments').textContent;
 
     if (commentCount < MAX_COUNT_COMMENT_SHOW) {
-      socialCommentCount.textContent = `${commentCount} из ${bigPictureCommentsCount.textContent} комментариев`;
+      socialCommentCountFirstSpan.textContent = `${commentCount} из `;
     } else {
-      socialCommentCount.textContent = `${MAX_COUNT_COMMENT_SHOW} из ${bigPictureCommentsCount.textContent} комментариев`;
+      socialCommentCountFirstSpan.textContent = `${MAX_COUNT_COMMENT_SHOW} из `;
     }
     generateBlockFragment(photoComments);
   }
-};
+}
 
 // Отображение дополнительных комментариев по клику иконки закрытия
 comentsAddButton.addEventListener('click', () => {
