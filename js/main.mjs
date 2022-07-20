@@ -3,3 +3,4 @@ import './form.mjs';
 import './form-validate.mjs';
 import './picture.mjs';
 import './big-picture.mjs';
+import './edit-new-photo.mjs';

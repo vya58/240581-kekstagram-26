@@ -1,9 +1,10 @@
 import { checkStringLength, getCountSymbol } from './util.mjs';
 
-const form = document.querySelector('.img-upload__form');
-const submitButton = document.querySelector('#upload-submit');
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAG_COUNT = 5;
+
+const form = document.querySelector('.img-upload__form');
+const submitButton = document.querySelector('#upload-submit');
 
 const pristine = new Pristine(form);
 
