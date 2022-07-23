@@ -1,7 +1,5 @@
-import { checkStringLength, getCountSymbol } from './util.mjs';
-
-const MAX_HASHTAG_LENGTH = 20;
-const MAX_HASHTAG_COUNT = 5;
+import { checkStringLength, getCountSymbol } from './util.js';
+import { MAX_HASHTAG_LENGTH, MAX_HASHTAG_COUNT } from './data.js';
 
 const form = document.querySelector('.img-upload__form');
 const submitButton = document.querySelector('#upload-submit');
@@ -82,8 +80,10 @@ form.addEventListener('input', (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
-    submitButton.removeAttribute('disabled');
+    submitButton.disabled = false;
   } else {
-    submitButton.setAttribute('disabled', 'disabled');
+    submitButton.disabled = true;
   }
 });
+
+export { form, submitButton };

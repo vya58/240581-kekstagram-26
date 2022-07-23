@@ -1,11 +1,11 @@
-import { closeByEscKeydown } from './util.mjs';
+import { closeByEscKeydown } from './util.js';
+import { resetScale } from './edit-new-photo.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
 const textDescription = document.querySelector('.text__description');
 const textHashtags = document.querySelector('.text__hashtags');
 const uploadCancel = document.querySelector('#upload-cancel');
-
 const imgUploadInput = document.querySelector('.img-upload__input');
 const imgUploadPreview = document.querySelector('.img-upload__preview > img');
 
@@ -20,6 +20,7 @@ function closeForm() {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
+  resetScale();
   uploadFile.value = '';
   textDescription.value = '';
   textHashtags.value = '';
@@ -64,3 +65,5 @@ imgUploadInput.addEventListener('change', () => {
     imgUploadPreview.src = '';
   }
 });
+
+export {closeForm, onUploadCancelEscKeydown};
