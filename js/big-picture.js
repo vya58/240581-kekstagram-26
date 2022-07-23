@@ -1,5 +1,6 @@
-import { pictures } from './picture.mjs';
-import { closeByEscKeydown, getPartString } from './util.mjs';
+import { pictures } from './main.js';
+import { closeByEscKeydown, getPartString } from './util.js';
+import { MAX_COUNT_COMMENT_SHOW, ADD_COUNT_SHOW } from './data.js';
 
 const body = document.querySelector('body');
 
@@ -13,10 +14,6 @@ const socialCommentCountFirstSpan = bigPicture.querySelector('.social__comment-c
 const bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
 const picturesContainer = document.querySelector('.pictures');
 const comentsAddButton = bigPicture.querySelector('.social__comments-loader');
-
-// Константы, хранящие количество отображаемых и добавляемых к ним скрытых комментариев
-const MAX_COUNT_COMMENT_SHOW = 5;
-const ADD_COUNT_SHOW = 5;
 
 // Элементы комментариев к изображению
 const commentsBlock = bigPicture.querySelector('.social__comments');
@@ -71,7 +68,7 @@ function addСomments() {
 // Функция получения порядкового номера элемента массива объектов фотоминиатюр по её id
 function getElementArrayNumber(arrayPictures, pictId) {
   for (let i = 0; i < arrayPictures.length; i++) {
-    if (arrayPictures[i].id === Number(pictId)) {
+    if ((arrayPictures[i].id + 1) === Number(pictId)) {
       return i;
     }
   }
@@ -123,7 +120,7 @@ function onListClick(evt) {
 
     // Сохраняем порядковый номер фотоминиатюры, массив с комментариями и их количество в коллекции изображений 'pictures'
     const elementArray = getElementArrayNumber(pictures, idFoto);
-    const photoComments = pictures[elementArray].message;
+    const photoComments = pictures[elementArray].comments;
     const commentCount = photoComments.length;
 
     // Передаем данные в разметку полноразмерного изображения из фотоминиатюр

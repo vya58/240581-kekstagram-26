@@ -1,3 +1,5 @@
+import {ALERT_SHOW_TIME} from './data.js';
+
 /* Функция, возвращающая случайное целое число из переданного диапазона включительно.
 * Функция взята из интернета и доработана https://htmlacademy.ru/
 * Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
@@ -15,7 +17,6 @@
 function getRandomPositiveInteger(a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
@@ -124,4 +125,40 @@ function getCountSymbol(str, symbol) {
   return count;
 }
 
-export { checkStringLength, getRandomPositiveInteger, getUniqueRangeValue, getNextValue, isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol };
+/* Функция создания блока с сообщением об ошибке загрузки данных с сервера
+* @param {string} message - Текст сообщения об ошибке
+*
+*/
+function createShowAlert (message) {
+  const alertSection = document.createElement('section');
+  alertSection.style.position = 'absolute';
+  alertSection.style.zIndex = '100';
+  alertSection.style.left = '0';
+  alertSection.style.top = '0';
+  alertSection.style.right = '0';
+  alertSection.style.padding = '10px, 3px';
+  alertSection.style.fontSize = '30px';
+
+  const alert = document.createElement('div');
+  alert.style.position = 'relative';
+  alert.style.width = '90%';
+  alert.style.height = '100px';
+  alert.style.margin = 'auto';
+
+  alert.style.padding = '40px';
+  alert.style.fontSize = '30px';
+  alert.style.textAlign = 'center';
+  alert.style.verticalAlign = 'middle';
+  alert.textContent = message;
+  alert.style.backgroundColor = 'red';
+
+  alertSection.append(alert);
+
+  document.body.append(alertSection);
+
+  setTimeout(() => {
+    alertSection.remove();
+  }, ALERT_SHOW_TIME);
+}
+
+export { checkStringLength, getRandomPositiveInteger, getUniqueRangeValue, getNextValue, isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert};
