@@ -1,26 +1,4 @@
-import {ALERT_SHOW_TIME} from './data.js';
-
-/* Функция, возвращающая случайное целое число из переданного диапазона включительно.
-* Функция взята из интернета и доработана https://htmlacademy.ru/
-* Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-* Диапазон может быть только положительный, включая ноль.
-* Дробные значения округляются:
-* - нижняя граница диапазона - к ближайшему большему целому с помощью Math.ceil;
-* - верхняя граница - к ближайшему меньшему целому с помощью Math.floor.
-* Реализована поддержка передачи минимального и максимального значения в любом порядке.
-* Переданные отрицательные берутся по модулю с помощью Math.ceil.
-* @param {number} a - Число, задающее начало диапазона
-* @param {number} b - Число, задающее конец диапазона
-*
-* @return {number} - Случайное целое число из переданного диапазона
-*/
-function getRandomPositiveInteger(a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-
-  return Math.floor(result);
-}
+import { ALERT_SHOW_TIME, TIMEOUT_DELAY } from './data.js';
 
 /* Функция для проверки максимальной длины строки.
 * Функция взята из https://htmlacademy.ru/
@@ -31,42 +9,6 @@ function getRandomPositiveInteger(a, b) {
 */
 function checkStringLength(string, length) {
   return string.length <= length;
-}
-
-/* Функция получения уникального случайного значения из заданного диапазона
-* @param {array} array - Массив чисел, из которых выбирается случайное уникальное число
-* @param {number} min - Число, задающее начало диапазона
-* @param {number} max - Число, задающее конец диапазона
-*
-* @return {number} случайное целое число из переданного диапазона
-*/
-function getUniqueRangeValue(array, min, max) {
-  let number = getRandomPositiveInteger(min, max);
-
-  while (array.includes(number)) {
-    number = getRandomPositiveInteger(min, max);
-  }
-  array.push(number);
-
-  return number;
-}
-
-/* Функция возврата числа, большего на '1', чем последнее значение в переданном массиве, и добавления его в конец этого массива
-* @param {array} array - Массив чисел
-*
-* @return {number} целое число, увеличенное на '1'
-*/
-function getNextValue(array) {
-  let value = array[array.length - 1];
-
-  if (!value) {
-    value = 0;
-  }
-
-  value++;
-  array.push(value);
-
-  return value;
 }
 
 /* Функция проверки нажатой клавиши 'Escape'
@@ -129,7 +71,7 @@ function getCountSymbol(str, symbol) {
 * @param {string} message - Текст сообщения об ошибке
 *
 */
-function createShowAlert (message) {
+function createShowAlert(message) {
   const alertSection = document.createElement('section');
   alertSection.style.position = 'absolute';
   alertSection.style.zIndex = '100';
@@ -144,7 +86,6 @@ function createShowAlert (message) {
   alert.style.width = '90%';
   alert.style.height = '100px';
   alert.style.margin = 'auto';
-
   alert.style.padding = '40px';
   alert.style.fontSize = '30px';
   alert.style.textAlign = 'center';
@@ -161,4 +102,30 @@ function createShowAlert (message) {
   }, ALERT_SHOW_TIME);
 }
 
-export { checkStringLength, getRandomPositiveInteger, getUniqueRangeValue, getNextValue, isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert};
+// Функция взята из интернета и доработана
+// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
+function debounce(callback, timeoutDelay = TIMEOUT_DELAY) {
+  // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
+  // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
+  let timeoutId;
+
+  return (...rest) => {
+    // Перед каждым новым вызовом удаляем предыдущий таймаут,
+    // чтобы они не накапливались
+    clearTimeout(timeoutId);
+
+    // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+
+    // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
+    // пока действие совершается чаще, чем переданная задержка timeoutDelay
+  };
+}
+
+// Функция взята из интернета
+// Источник - https://learn.javascript.ru/task/shuffle
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+export { checkStringLength, isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert, debounce, shuffle };

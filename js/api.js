@@ -23,7 +23,7 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         return onSuccess();
       }
-      throw new Error('Не удалось отправить форму. Попробуйте ещё раз');
+      throw new Error('Не удалось отправить форму. Попробуйте ещё раз!');
     })
     .catch((err) => {
       onFail(err.message);

@@ -118,7 +118,7 @@ function onListClick(evt) {
     const closeString = '.';
     const idFoto = getPartString(srcFoto, firstString, closeString);
 
-    // Сохраняем порядковый номер фотоминиатюры, массив с комментариями и их количество в коллекции изображений 'pictures'
+    // Сохраняем порядковый номер фотоминиатюры, массив с комментариями и их количество из коллекции изображений 'pictures'
     const elementArray = getElementArrayNumber(pictures, idFoto);
     const photoComments = pictures[elementArray].comments;
     const commentCount = photoComments.length;
