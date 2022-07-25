@@ -11,6 +11,8 @@ const NUMBER_OF_RANDOM_PHOTOS = 10;
 const MAX_COUNT_COMMENT_SHOW = 5;
 const ADD_COUNT_SHOW = 5;
 
+// Максимальное количество знаков в комментарии не может составлять больше 140 символов. Ограничение задано в блоке '.text__description'
+
 // Максимальное количество знаков в хэш-теге к добавляемому изображению и максимальное количество хэш-тэгов
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAG_COUNT = 5;

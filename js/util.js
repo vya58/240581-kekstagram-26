@@ -1,16 +1,5 @@
 import { ALERT_SHOW_TIME, TIMEOUT_DELAY } from './data.js';
 
-/* Функция для проверки максимальной длины строки.
-* Функция взята из https://htmlacademy.ru/
-* @param {string} string - Проверяемая строка
-* @param {number} length - Максимальная длина строки
-*
-* @return {boolean} true, если строка проходит по длине и false — если не проходит
-*/
-function checkStringLength(string, length) {
-  return string.length <= length;
-}
-
 /* Функция проверки нажатой клавиши 'Escape'
 * Функция взята из https://htmlacademy.ru/
 *
@@ -128,4 +117,4 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
 
-export { checkStringLength, isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert, debounce, shuffle };
+export { isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert, debounce, shuffle };
