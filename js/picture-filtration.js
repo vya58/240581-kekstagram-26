@@ -48,13 +48,9 @@ function onFilterDiscussionClick(photos, renderPictures) {
     changeActiveFilter(evt.target);
 
     const photosArray = photos.slice();
-    photosArray.sort((a, b) => {
-      if (a.likes > b.likes) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
+
+    photosArray.sort((a, b) => b.likes - a.likes);
+
     renderPictures(photosArray);
   });
 }
