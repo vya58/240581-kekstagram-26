@@ -24,20 +24,20 @@ function onBigPictureEscKeydown(evt) {
   closeByEscKeydown(closeBigPicture, evt);
 }
 
+// Функция скрытия окна полноразмерного изображения и удаление обработчика для закрытия по нажатию на 'Escape'
+function closeBigPicture() {
+  bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
+
+  document.removeEventListener('keydown', onBigPictureEscKeydown);
+}
+
 // Функция показа окна полноразмерного изображения и добавление обработчика для закрытия
 function openBigPicture() {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
 
   document.addEventListener('keydown', onBigPictureEscKeydown);
-}
-
-// Функция скрытия окна полноразмерного изображения и удаление обработчика для закрытия
-function closeBigPicture() {
-  bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', onBigPictureEscKeydown);
 }
 
 // Закрытие окна полноразмерного изображения по клику иконки закрытия
@@ -63,6 +63,7 @@ function addСomments() {
 
   // Изменяем число показанных комментариев в блоке '.social__comment-count'
   socialCommentCountFirstSpan.textContent = `${openComments} из `;
+  return openComments;
 }
 
 // Функция получения порядкового номера элемента массива объектов фотоминиатюр по её id
@@ -129,10 +130,13 @@ function onListClick(evt) {
     bigPictureLikes.textContent = target.nextElementSibling.querySelector('.picture__likes').textContent;
     bigPictureCommentsCount.textContent = target.nextElementSibling.querySelector('.picture__comments').textContent;
 
-    if (commentCount < MAX_COUNT_COMMENT_SHOW) {
+    // Отображение количества комментариев и состояние кнопки загрузки скрытых комментариев в этой связи
+    if (commentCount <= MAX_COUNT_COMMENT_SHOW) {
       socialCommentCountFirstSpan.textContent = `${commentCount} из `;
+      comentsAddButton.classList.add('hidden');
     } else {
       socialCommentCountFirstSpan.textContent = `${MAX_COUNT_COMMENT_SHOW} из `;
+      comentsAddButton.classList.remove('hidden');
     }
     generateBlockFragment(photoComments);
   }
@@ -140,7 +144,12 @@ function onListClick(evt) {
 
 // Отображение дополнительных комментариев по клику иконки закрытия
 comentsAddButton.addEventListener('click', () => {
-  addСomments();
+  const openComments = addСomments();
+
+  // Скрытие кнопки загрузки комметариев, если они закончились
+  if (Number(openComments) === Number(bigPictureCommentsCount.textContent)) {
+    comentsAddButton.classList.add('hidden');
+  }
 });
 
 picturesContainer.addEventListener('click', onListClick);
