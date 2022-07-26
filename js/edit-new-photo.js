@@ -1,4 +1,4 @@
-import {MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, sliderOptions} from './data.js';
+import {DEFAULT_SCALE, MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, sliderOptions} from './data.js';
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
@@ -15,6 +15,7 @@ let scale = parseInt(scaleControlValue.value, 10);
 
 // Функция применения изменений значения размера изображения
 function resetScale() {
+  scaleControlValue.value = DEFAULT_SCALE;
   imgUploadPreview.removeAttribute('class');
   imgUploadPreview.removeAttribute('style');
   effectsNone.checked = true;
@@ -62,7 +63,7 @@ noUiSlider.create(sliderElement, {
 sliderFieldset.classList.add('hidden');
 
 // Функция-обработчик нажатия на иконки эффектов
-function getEffectsItem(evt) {
+function onEffectsItemClick(evt) {
   let nameEffectsItem = 'none';
   if (evt.target.matches('.effects__radio')) {
     nameEffectsItem = evt.target.value;
@@ -105,7 +106,7 @@ scaleControlSmaller.addEventListener('click', decreaseSize);
 scaleControlBigger.addEventListener('click', increasSize);
 
 // Обработчик событий на списке эффектов
-effectsList.addEventListener('change', getEffectsItem);
+effectsList.addEventListener('change', onEffectsItemClick);
 
 // Обработчик событий слайдера
 sliderElement.noUiSlider.on('update', () => {
