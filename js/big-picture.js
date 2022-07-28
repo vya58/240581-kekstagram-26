@@ -24,14 +24,9 @@ function onBigPictureEscKeydown(evt) {
   closeByEscKeydown(closeBigPicture, evt);
 }
 
+<<<<<<< HEAD
 // Функция показа окна полноразмерного изображения и добавление обработчика для закрытия по нажатию на 'Escape'
-function openBigPicture() {
-  bigPicture.classList.remove('hidden');
-  body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onBigPictureEscKeydown);
-}
-
+=======
 // Функция скрытия окна полноразмерного изображения и удаление обработчика для закрытия по нажатию на 'Escape'
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
@@ -40,6 +35,26 @@ function closeBigPicture() {
   document.removeEventListener('keydown', onBigPictureEscKeydown);
 }
 
+// Функция показа окна полноразмерного изображения и добавление обработчика для закрытия
+>>>>>>> 078ab1e9daafd5c95d03a6e4277cabeac2f5de90
+function openBigPicture() {
+  bigPicture.classList.remove('hidden');
+  body.classList.add('modal-open');
+
+  document.addEventListener('keydown', onBigPictureEscKeydown);
+}
+
+<<<<<<< HEAD
+// Функция скрытия окна полноразмерного изображения и удаление обработчика для закрытия по нажатию на 'Escape'
+function closeBigPicture() {
+  bigPicture.classList.add('hidden');
+  body.classList.remove('modal-open');
+
+  document.removeEventListener('keydown', onBigPictureEscKeydown);
+}
+
+=======
+>>>>>>> 078ab1e9daafd5c95d03a6e4277cabeac2f5de90
 // Закрытие окна полноразмерного изображения по клику иконки закрытия
 bigPictureCancel.addEventListener('click', () => {
   closeBigPicture();
