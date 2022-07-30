@@ -1,4 +1,4 @@
-import {DEFAULT_SCALE, MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, sliderOptions} from './data.js';
+import {DEFAULT_SCALE, MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, effectToSliderOptions} from './data.js';
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
@@ -64,26 +64,26 @@ sliderFieldset.classList.add('hidden');
 
 // Функция-обработчик нажатия на иконки эффектов
 function onEffectsItemClick(evt) {
-  let nameEffectsItem = 'none';
+  let keyToValue = 'none';
   if (evt.target.matches('.effects__radio')) {
-    nameEffectsItem = evt.target.value;
+    keyToValue = evt.target.value;
     imgUploadPreview.removeAttribute('class');
-    imgUploadPreview.classList.add(`effects__preview--${nameEffectsItem}`);
+    imgUploadPreview.classList.add(`effects__preview--${keyToValue}`);
 
-    if (nameEffectsItem === 'none') {
+    if (keyToValue === 'none') {
       imgUploadPreview.removeAttribute('class');
       imgUploadPreview.removeAttribute('style');
       sliderFieldset.classList.add('hidden');
       effectLevelValue.value = DEFAULT_START_VALUE;
     } else {
       sliderFieldset.classList.remove('hidden');
-      sliderElement.noUiSlider.updateOptions(sliderOptions[nameEffectsItem]);
+      sliderElement.noUiSlider.updateOptions(effectToSliderOptions[keyToValue]);
     }
   }
 }
 
 // Функция изменения стилей изображения
-function applyingEffect() {
+function applyEffect() {
   if (imgUploadPreview.classList.contains('effects__preview--chrome')) {
     imgUploadPreview.style.filter = `grayscale(${effectLevelValue.value})`;
   }
@@ -111,7 +111,7 @@ effectsList.addEventListener('change', onEffectsItemClick);
 // Обработчик событий слайдера
 sliderElement.noUiSlider.on('update', () => {
   effectLevelValue.value = sliderElement.noUiSlider.get();
-  applyingEffect();
+  applyEffect();
 });
 
 export { resetScale };

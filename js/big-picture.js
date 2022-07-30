@@ -1,5 +1,4 @@
-import { pictures } from './main.js';
-import { closeByEscKeydown, getPartString } from './util.js';
+import { getPartString } from './util.js';
 import { MAX_COUNT_COMMENT_SHOW, ADD_COUNT_SHOW } from './data.js';
 
 const body = document.querySelector('body');
@@ -7,12 +6,8 @@ const body = document.querySelector('body');
 // Элементы окна полноразмерного изображения
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('#picture-cancel');
-const bigPictureSrc = bigPicture.querySelector('.big-picture__img > img');
-const bigPictureDescription = bigPicture.querySelector('.social__caption');
-const bigPictureLikes = bigPicture.querySelector('.likes-count');
 const socialCommentCountFirstSpan = bigPicture.querySelector('.social__comment-count').firstChild;
 const bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
-const picturesContainer = document.querySelector('.pictures');
 const comentsAddButton = bigPicture.querySelector('.social__comments-loader');
 
 // Элементы комментариев к изображению
@@ -21,7 +16,9 @@ const commentBlock = bigPicture.querySelectorAll('.social__comment');
 
 // Функция-обработчик закрытия окна по нажатию на 'Escape'
 function onBigPictureEscKeydown(evt) {
-  closeByEscKeydown(closeBigPicture, evt);
+  if (evt.key === 'Escape') {
+    closeBigPicture();
+  }
 }
 
 // Функция показа окна полноразмерного изображения и добавление обработчика для закрытия по нажатию на 'Escape'
@@ -49,21 +46,19 @@ bigPictureCancel.addEventListener('click', () => {
 function addСomments() {
   const comenntsElementsAll = bigPicture.querySelectorAll('.social__comment');
   const comenntsElementsHidden = bigPicture.querySelectorAll('.social__comment + .hidden');
-  let openComments = comenntsElementsAll.length - comenntsElementsHidden.length;
+  let openCommentsCount = comenntsElementsAll.length - comenntsElementsHidden.length;
 
   // Добавляем отображение скрытых комментариев в количестве, заданном константой 'ADD_COUNT_SHOW', но не более имеющегося остатка
-  let add = 0;
   for (let i = 0; i < ADD_COUNT_SHOW; i++) {
     if (i < comenntsElementsHidden.length) {
       comenntsElementsHidden[i].classList.remove('hidden');
-      add++;
+      openCommentsCount++;
     }
   }
-  openComments += add;
 
   // Изменяем число показанных комментариев в блоке '.social__comment-count'
-  socialCommentCountFirstSpan.textContent = `${openComments} из `;
-  return openComments;
+  socialCommentCountFirstSpan.textContent = `${openCommentsCount} из `;
+  return openCommentsCount;
 }
 
 // Функция получения порядкового номера элемента массива объектов фотоминиатюр по её id
@@ -73,6 +68,7 @@ function getElementArrayNumber(arrayPictures, pictId) {
       return i;
     }
   }
+
 }
 
 // Функция генерации блоков комментариев к фотоминиатюре с соответствующим id и вставки их в разметку
@@ -82,64 +78,21 @@ function generateBlockFragment(arrayComments) {
   const commentsBlockFragment = document.createDocumentFragment();
 
   // Генерируем блоки комментариев к фотоминиатюре с соответствующим id и сохраняем в DocumentFragment
-  for (let i = 0; i < arrayComments.length; i++) {
-
+  arrayComments.forEach((element) => {
     // Клонируем один блок комментария-образца из разметки
     const cloneCommentBlock = commentBlock[0].cloneNode(true);
 
     // Передаем данные в разметку блок комментария
-    cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('src', arrayComments[i].avatar);
-    cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('alt', arrayComments[i].name);
-    cloneCommentBlock.querySelector('.social__text').textContent = arrayComments[i].message;
+    cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('src', element.avatar);
+    cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('alt', element.name);
+    cloneCommentBlock.querySelector('.social__text').textContent = element.message;
 
-    if (i >= MAX_COUNT_COMMENT_SHOW) {
+    if (arrayComments.indexOf(element) >= MAX_COUNT_COMMENT_SHOW) {
       cloneCommentBlock.classList.add('hidden');
     }
     commentsBlockFragment.appendChild(cloneCommentBlock);
-  }
+  });
   commentsBlock.append(commentsBlockFragment);
-}
-
-// Обработчик событий на коллекции фотоминиатюр
-function onListClick(evt) {
-  if (evt.target.matches('.picture__img')) {
-    const target = evt.target;
-
-    // Удаляем имеющиеся комментарии-образцы
-    for (let j = commentsBlock.children.length - 1; j >= 0; j--) {
-      const child = commentsBlock.children[j];
-      child.parentElement.removeChild(child);
-    }
-    // Показываем окно полноразмерного изображения
-    openBigPicture();
-
-    // Получаем id фотоминиатюры из её атрибута src
-    const srcFoto = target.src;
-    const firstString = 'photos/';
-    const closeString = '.';
-    const idFoto = getPartString(srcFoto, firstString, closeString);
-
-    // Сохраняем порядковый номер фотоминиатюры, массив с комментариями и их количество из коллекции изображений 'pictures'
-    const elementArray = getElementArrayNumber(pictures, idFoto);
-    const photoComments = pictures[elementArray].comments;
-    const commentCount = photoComments.length;
-
-    // Передаем данные в разметку полноразмерного изображения из фотоминиатюр
-    bigPictureSrc.setAttribute('src', target.src);
-    bigPictureDescription.textContent = target.alt;
-    bigPictureLikes.textContent = target.nextElementSibling.querySelector('.picture__likes').textContent;
-    bigPictureCommentsCount.textContent = target.nextElementSibling.querySelector('.picture__comments').textContent;
-
-    // Отображение количества комментариев и состояние кнопки загрузки скрытых комментариев в этой связи
-    if (commentCount <= MAX_COUNT_COMMENT_SHOW) {
-      socialCommentCountFirstSpan.textContent = `${commentCount} из `;
-      comentsAddButton.classList.add('hidden');
-    } else {
-      socialCommentCountFirstSpan.textContent = `${MAX_COUNT_COMMENT_SHOW} из `;
-      comentsAddButton.classList.remove('hidden');
-    }
-    generateBlockFragment(photoComments);
-  }
 }
 
 // Отображение дополнительных комментариев по клику иконки закрытия
@@ -147,9 +100,63 @@ comentsAddButton.addEventListener('click', () => {
   const openComments = addСomments();
 
   // Скрытие кнопки загрузки комметариев, если они закончились
-  if (Number(openComments) === Number(bigPictureCommentsCount.textContent)) {
+  if (openComments === Number(bigPictureCommentsCount.textContent)) {
     comentsAddButton.classList.add('hidden');
   }
 });
 
-picturesContainer.addEventListener('click', onListClick);
+// Функция-обработчик клика по коллекции фотоминиатюр
+function onListClick(photos) {
+  const bigPictureImage = bigPicture.querySelector('.big-picture__img > img');
+  const bigPictureDescription = bigPicture.querySelector('.social__caption');
+  const bigPictureLikesCount = bigPicture.querySelector('.likes-count');
+  const picturesContainer = document.querySelector('.pictures');
+  picturesContainer.addEventListener('click', (evt) => {
+    if (evt.target.matches('.picture__img')) {
+      const target = evt.target;
+
+      // Удаляем имеющиеся комментарии-образцы
+      for (let i = commentsBlock.children.length - 1; i >= 0; i--) {
+        const child = commentsBlock.children[i];
+        child.parentElement.removeChild(child);
+      }
+      // Показываем окно полноразмерного изображения
+      openBigPicture();
+
+      // Получаем id фотоминиатюры из её атрибута src
+      const srcFoto = target.src;
+      const firstString = 'photos/';
+      const closeString = '.';
+      const idFoto = getPartString(srcFoto, firstString, closeString);
+
+      // Сохраняем порядковый номер фотоминиатюры, массив с комментариями и их количество из коллекции изображений 'pictures'
+      const elementArray = getElementArrayNumber(photos, idFoto);
+      const photoComments = photos[elementArray].comments;
+      const commentCount = photoComments.length;
+
+      // Передаем данные в разметку полноразмерного изображения из фотоминиатюр
+      bigPictureImage.setAttribute('src', target.src);
+      bigPictureDescription.textContent = target.alt;
+      bigPictureLikesCount.textContent = target.nextElementSibling.querySelector('.picture__likes').textContent;
+      bigPictureCommentsCount.textContent = target.nextElementSibling.querySelector('.picture__comments').textContent;
+
+      // Отображение количества комментариев и состояние кнопки загрузки скрытых комментариев в этой связи
+      if (commentCount <= MAX_COUNT_COMMENT_SHOW) {
+        socialCommentCountFirstSpan.textContent = `${commentCount} из `;
+        comentsAddButton.classList.add('hidden');
+      } else {
+        socialCommentCountFirstSpan.textContent = `${MAX_COUNT_COMMENT_SHOW} из `;
+        comentsAddButton.classList.remove('hidden');
+      }
+      generateBlockFragment(photoComments);
+    }
+  });
+}
+
+// Функция запуска обработчика клика на коллекцию фотоминиатюр
+function initBigPicture(photos) {
+  const copiedPhotos = photos.slice();
+  onListClick(copiedPhotos);
+}
+
+export { initBigPicture };

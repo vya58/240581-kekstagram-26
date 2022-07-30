@@ -1,44 +1,41 @@
 import { debounce, shuffle } from './util.js';
-import { renderPicture } from './picture.js';
+import { renderGallery } from './picture.js';
 import { TIMEOUT_DELAY, NUMBER_OF_RANDOM_PHOTOS } from './data.js';
 
-const imgFilters = document.querySelector('.img-filters');
-const imgFiltersButton = document.querySelectorAll('.img-filters__button');
-
-// Функция показа блока фильтров
-function showImageFilters() {
-  imgFilters.classList.remove('img-filters--inactive');
-}
-
+const imgFiltersContainer = document.querySelector('.img-filters');
+const imgFilterButtons = document.querySelectorAll('.img-filters__button');
 const filterDefault = document.querySelector('#filter-default');
 const filterRandom = document.querySelector('#filter-random');
 const filterDiscussed = document.querySelector('#filter-discussed');
 
 // Функция активации выбранного фильтра и деактивации всех остальных
 function changeActiveFilter(filter) {
-  imgFiltersButton.forEach((button) => {
+  imgFilterButtons.forEach((button) => {
     button.classList.remove('img-filters__button--active');
   });
   filter.classList.add('img-filters__button--active');
 }
 
 // Функция-обработчик клика по фильтру 'По умолчанию'
-function onFilterDefaultClick(photos, renderPictures) {
+function listenDefaultFilterClick(photos, renderPictures) {
   filterDefault.addEventListener('click', (evt) => {
     changeActiveFilter(evt.target);
-    const photosArray = photos.slice();
-    renderPictures(photosArray);
+
+    const copiedPhotos = photos.slice();
+
+    renderPictures(copiedPhotos);
   });
 }
 
 // Функция-обработчик клика по фильтру 'Случайные'
-function onFilterRandomClick(photos, renderPictures) {
+function listenRandomFilterClick(photos, renderPictures) {
   filterRandom.addEventListener('click', (evt) => {
     changeActiveFilter(evt.target);
-    const photosArray = photos.slice();
 
-    shuffle(photosArray);
-    renderPictures(photosArray, NUMBER_OF_RANDOM_PHOTOS);
+    const copiedPhotos = photos.slice();
+
+    shuffle(copiedPhotos);
+    renderPictures(copiedPhotos, NUMBER_OF_RANDOM_PHOTOS);
   });
 }
 
@@ -47,19 +44,20 @@ function onFilterDiscussionClick(photos, renderPictures) {
   filterDiscussed.addEventListener('click', (evt) => {
     changeActiveFilter(evt.target);
 
-    const photosArray = photos.slice();
+    const copiedPhotos = photos.slice();
 
-    photosArray.sort((a, b) => b.likes - a.likes);
+    copiedPhotos.sort((a, b) => b.comments.length - a.comments.length);
 
-    renderPictures(photosArray);
+    renderPictures(copiedPhotos);
   });
 }
 
 // Функция запуска обработчиков фильтров с добавлением 'debounce' в вызываемые ими функции
-function addFilters(photos) {
-  onFilterDefaultClick(photos, debounce(renderPicture, TIMEOUT_DELAY));
-  onFilterDiscussionClick(photos, debounce(renderPicture, TIMEOUT_DELAY));
-  onFilterRandomClick(photos, debounce(renderPicture, TIMEOUT_DELAY));
+function initFilters(photos) {
+  imgFiltersContainer.classList.remove('img-filters--inactive');
+  listenDefaultFilterClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
+  onFilterDiscussionClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
+  listenRandomFilterClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
 }
 
-export { showImageFilters, addFilters };
+export { initFilters };

@@ -25,7 +25,7 @@ const CHANGE_STEP = 25;
 
 // Эффекты, накладываемые на загружаемое изображение и их параметры согласно ТЗ
 const DEFAULT_START_VALUE = 100;
-const sliderOptions = {
+const effectToSliderOptions = {
   chrome: {
     range: {
       min: 0,
@@ -71,4 +71,4 @@ const sliderOptions = {
 // Продолжительность отображения окна ошибки
 const ALERT_SHOW_TIME = 5000;
 
-export { MAX_COUNT_COMMENT_SHOW, ADD_COUNT_SHOW, MAX_HASHTAG_LENGTH, MAX_HASHTAG_COUNT, DEFAULT_SCALE, MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, sliderOptions, ALERT_SHOW_TIME, TIMEOUT_DELAY, NUMBER_OF_PHOTOS, NUMBER_OF_RANDOM_PHOTOS };
+export { MAX_COUNT_COMMENT_SHOW, ADD_COUNT_SHOW, MAX_HASHTAG_LENGTH, MAX_HASHTAG_COUNT, DEFAULT_SCALE, MIN_SCALE_VALUE, MAX_SCALE_VALUE, CHANGE_STEP, DEFAULT_START_VALUE, effectToSliderOptions, ALERT_SHOW_TIME, TIMEOUT_DELAY, NUMBER_OF_PHOTOS, NUMBER_OF_RANDOM_PHOTOS };

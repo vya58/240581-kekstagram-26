@@ -13,16 +13,16 @@ const pristine = new Pristine(
 );
 
 // Валидация поля ввода хэш-тегов
-const textHashtags = document.querySelector('.text__hashtags');
-const reSharp = /^#/;
-const re = /[A-Za-zА-Яа-яЁё0-9#]{1,19}$/;
+const hashtagsInput = document.querySelector('.text__hashtags');
+const re = /^[A-Za-zА-Яа-яЁё0-9#]+$/;
 
-// Функция проверки, что хэш-тег начинается с символа '#'
-function validateHashtagBeginWithSharp(value) {
-  const array = value.split(' ');
+// Проверка, что перым символом является '#'
+function validateHashtagSharpFirst(value) {
+  const array = value.split(/\s+/);
+  const symbol = '#';
 
-  for (let i = 0; i < array.length; i++) {
-    if (!reSharp.test(array[i]) && value) {
+  for (const element of array) {
+    if (!(element === '' || element[0] === symbol)) {
       return false;
     }
   }
@@ -31,13 +31,13 @@ function validateHashtagBeginWithSharp(value) {
 
 // Проверка, что хэш-тег состоит только из одного символа '#'
 function validateHashtagSharpOnly(value) {
-  const array = value.split(' ');
+  const array = value.split(/\s+/);
   const symbol = '#';
 
-  for (let i = 0; i < array.length; i++) {
-    const countHashtags = getCountSymbol(array[i], symbol);
+  for (const element of array) {
+    const hashtagsСount = getCountSymbol(element, symbol);
 
-    if (countHashtags === 1 && array[i].length === 1) {
+    if (hashtagsСount === 1 && element.length === 1) {
       return false;
     }
   }
@@ -46,25 +46,25 @@ function validateHashtagSharpOnly(value) {
 
 // Функция проверки количества символов # в отдельном хэш-теге
 function validateHashtagSharpCount(value) {
-  const array = value.split(' ');
+  const array = value.split(/\s+/);
   const symbol = '#';
 
-  for (let i = 0; i < array.length; i++) {
-    const countHashtags = getCountSymbol(array[i], symbol);
+  for (const element of array) {
+    const hashtagsСount = getCountSymbol(element, symbol);
 
-    if (countHashtags > 1 && array[i].length > 1) {
+    if (hashtagsСount > 1 && element.length > 1) {
       return false;
     }
   }
   return true;
 }
 
-// Функция проверки корректности введённых данных
+// Функция проверки корректности введённых символов
 function validateHashtagCharacter(value) {
-  const array = value.split(' ');
+  const array = value.split(/\s+/);
 
-  for (let i = 0; i < array.length; i++) {
-    if (!(array[i] === '' || re.test(array[i]))) {
+  for (const element of array) {
+    if (!(element === '' || re.test(element))) {
       return false;
     }
   }
@@ -73,9 +73,10 @@ function validateHashtagCharacter(value) {
 
 // Функция проверки на максимальную длину хэш-тега
 function validateHashtagLength(value) {
-  const array = value.split(' ');
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].length > MAX_HASHTAG_LENGTH) {
+  const array = value.split(/\s+/);
+
+  for (const element of array) {
+    if (element.length > MAX_HASHTAG_LENGTH) {
       return false;
     }
   }
@@ -84,50 +85,39 @@ function validateHashtagLength(value) {
 
 // Функция проверки на максимальное количество хэш-тегов
 function validateHashtagsCount(value) {
-  const array = value.split(' ');
-  for (let i = 0; i < array.length; i++) {
-    if (array.length > MAX_HASHTAG_COUNT) {
-      return false;
-    }
+  const array = value.split(/\s+/);
+
+  if (array.length > MAX_HASHTAG_COUNT) {
+    return false;
   }
   return true;
 }
 
 // Функция проверки хэш-тегов на дубликаты с учетом регистра
 function validateHashtagsDuplicate(value) {
-  const array = value.split(' ');
-  for (let i = 0; i < array.length; i++) {
+  const hashtagsString = value.toLowerCase();
+  const array = hashtagsString.split(/\s+/);
 
-    if (array[i].length > 1) {
-      for (let j = i + 1; j < array.length; j++) {
-        if (array[i] === array[j] || array[i].toLowerCase() === array[j].toLowerCase()) {
-          return false;
-        }
-      }
-    }
-  } return true;
+  if (new Set(array).size !== array.length) {
+    return false;
+  }
+  return true;
 }
 
 // Проверка поля ввода хэш-тегов функциями валидации
-pristine.addValidator(textHashtags, validateHashtagBeginWithSharp, 'Хэш-тег должен начинается с символа (#)!', false);
-pristine.addValidator(textHashtags, validateHashtagSharpOnly, 'Хеш-тег не может состоять только из одного символа #!', false);
-pristine.addValidator(textHashtags, validateHashtagSharpCount, 'Символ хэш-тега (#) должен быть только один!', false);
-pristine.addValidator(textHashtags, validateHashtagCharacter, 'Строка после решётки должна состоять только из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д!', false);
-pristine.addValidator(textHashtags, validateHashtagLength, 'Максимальная длина одного хэш-тега 20 символов, включая решётку!', false);
-pristine.addValidator(textHashtags, validateHashtagsCount, 'Нельзя указать больше пяти хэш-тегов!', false);
-pristine.addValidator(textHashtags, validateHashtagsDuplicate, 'Один и тот же хэш-тег не может быть использован дважды! Хэш-теги нечувствительны к регистру!', false);
+pristine.addValidator(hashtagsInput, validateHashtagSharpFirst, 'Хэш-тег должен начинается с символа (#)!');
+pristine.addValidator(hashtagsInput, validateHashtagSharpOnly, 'Хеш-тег не может состоять только из одного символа #!');
+pristine.addValidator(hashtagsInput, validateHashtagSharpCount, 'Символ хэш-тега (#) должен быть только один!');
+pristine.addValidator(hashtagsInput, validateHashtagCharacter, 'Строка после решётки должна состоять только из букв и чисел и не может содержать пробелы, спецсимволы (@, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д!', false);
+pristine.addValidator(hashtagsInput, validateHashtagLength, 'Максимальная длина одного хэш-тега 20 символов, включая решётку!');
+pristine.addValidator(hashtagsInput, validateHashtagsCount, 'Нельзя указать больше пяти хэш-тегов!');
+pristine.addValidator(hashtagsInput, validateHashtagsDuplicate, 'Один и тот же хэш-тег не может быть использован дважды! Хэш-теги нечувствительны к регистру!');
 
 // Функция-обработчик формы при вводе значений в поле
 form.addEventListener('input', (evt) => {
   evt.preventDefault();
 
-  const isValid = pristine.validate();
-
-  if (isValid) {
-    submitButton.disabled = false;
-  } else {
-    submitButton.disabled = true;
-  }
+  submitButton.disabled = !pristine.validate();
 });
 
 export { form, submitButton };

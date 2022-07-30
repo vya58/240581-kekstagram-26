@@ -1,9 +1,7 @@
-import { closeByEscKeydown } from './util.js';
 import { resetScale } from './edit-new-photo.js';
 
-const uploadFile = document.querySelector('#upload-file');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
-const textDescription = document.querySelector('.text__description');
+const descriptionInput = document.querySelector('.text__description');
 const textHashtags = document.querySelector('.text__hashtags');
 const uploadCancel = document.querySelector('#upload-cancel');
 const imgUploadInput = document.querySelector('.img-upload__input');
@@ -21,32 +19,32 @@ function closeForm() {
   document.body.classList.remove('modal-open');
 
   resetScale();
-  uploadFile.value = '';
-  textDescription.value = '';
+  imgUploadInput.value = '';
+  descriptionInput.value = '';
   textHashtags.value = '';
 
-  document.removeEventListener('keydown', onUploadCancelEscKeydown);
+  document.removeEventListener('keydown', onKeydown);
 }
 
 // Функция-обработчик открытия формы редактирования изображения
-uploadFile.addEventListener('change', () => {
+imgUploadInput.addEventListener('change', () => {
   openForm();
 
-  document.addEventListener('keydown', onUploadCancelEscKeydown);
+  document.addEventListener('keydown', onKeydown);
 });
 
-// ОФункция-обработчик закрытия формы редактирования изображения по нажатию на кнопку #upload-cancel
+// Функция-обработчик закрытия формы редактирования изображения по нажатию на кнопку #upload-cancel
 uploadCancel.addEventListener('click', () => {
   closeForm();
 });
 
 // Функция-обработчик закрытия формы редактирования изображения по нажатию на 'Escape'
-function onUploadCancelEscKeydown(evt) {
+function onKeydown(evt) {
   // Если фокус находится в поле ввода комментария или хэш-тега, нажатие на Esc не приводит к закрытию формы редактирования изображения
-  if (textDescription === document.activeElement || textHashtags === document.activeElement) {
+  if (descriptionInput === document.activeElement || textHashtags === document.activeElement) {
     return evt;
-  } else {
-    closeByEscKeydown(closeForm, evt);
+  } else if (evt.key === 'Escape') {
+    closeForm();
   }
 }
 
@@ -66,4 +64,4 @@ imgUploadInput.addEventListener('change', () => {
   }
 });
 
-export {closeForm, onUploadCancelEscKeydown};
+export {closeForm, onKeydown};

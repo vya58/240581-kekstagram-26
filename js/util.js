@@ -1,14 +1,5 @@
 import { ALERT_SHOW_TIME, TIMEOUT_DELAY } from './data.js';
 
-/* Функция проверки нажатой клавиши 'Escape'
-* Функция взята из https://htmlacademy.ru/
-*
-* @return {boolean} true, если нажата клавиша 'Escape' и false — если не она
-*/
-function isEscapeKey(evt) {
-  return evt.key === 'Escape';
-}
-
 /* Функция возврата части строки, находящейся между указанных символов (наборов символов) строки
 * @param {string} dissectString - Препарируемая строка
 * @param {string} initialString - Начальный символ (слово) препарируемой строки, после которого расположен начальный элемент искомой части строки
@@ -27,17 +18,6 @@ function getPartString(dissectString, initialString, closingString) {
     partString += dissectString.charAt(firstIndex + initialStringLength + i);
   }
   return partString;
-}
-
-/* Функция-обработчик закрытия окна по нажатию на 'Escape'
-* @param {function} closingFunction - Функция, осуществляющая закрытие
-*
-*/
-function closeByEscKeydown(closingFunction, evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closingFunction();
-  }
 }
 
 /* Функция получения количества указанного символа в строке
@@ -117,4 +97,11 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
 
-export { isEscapeKey, getPartString, closeByEscKeydown, getCountSymbol, createShowAlert, debounce, shuffle };
+// Функция удаления лишних пробелов. Взята из интернета и доработана
+// Источник - https://habr.com/ru/post/565726
+function removeSpaces(str) {
+  const formatted = str.replace(/\s{2,}/g, ' ').trim();
+  return formatted;
+}
+
+export { getPartString, getCountSymbol, createShowAlert, debounce, shuffle, removeSpaces };

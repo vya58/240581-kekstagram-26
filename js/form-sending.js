@@ -1,14 +1,18 @@
 import { sendData } from './api.js';
 import { form } from './form-validate.js';
-import { closeForm, onUploadCancelEscKeydown } from './form.js';
+import { closeForm, onKeydown } from './form.js';
 import { submitButton } from './form-validate.js';
-import { closeByEscKeydown } from './util.js';
+import { removeSpaces } from './util.js';
 
 // Отправка формы с фотографией
 function sendUserFormSubmit(onSuccess) {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     submitButton.disabled = true;
+
+    // Удаляем лишние введённыепробелы из поля хэш-тегов перед отправкой
+    const hashtagsInput = document.querySelector('.text__hashtags');
+    hashtagsInput.value = removeSpaces(hashtagsInput.value);
 
     sendData(
       () => {
@@ -27,73 +31,75 @@ function sendUserFormSubmit(onSuccess) {
 
 // Обработка успешной отправки формы
 const successTemplate = document.querySelector('#success').content;
-const cloneSuccessFragment = successTemplate.cloneNode(true);
-const cloneSuccess = cloneSuccessFragment.querySelector('.success');
-const successButton = cloneSuccess.querySelector('.success__button');
+const successRoot = successTemplate.cloneNode(true);
+const successSection = successRoot.querySelector('.success');
+const successButton = successRoot.querySelector('.success__button');
 
 // Функция закрытия окна с сообщением об успешной отправке по клавише 'Escape'
-function onSuccessMessageEscKeydown (evt) {
-  closeByEscKeydown(closeSuccessMessage, evt);
+function onSuccessKeydown (evt) {
+  if (evt.key === 'Escape') {
+    closeSuccessMessage();
+  }
 }
 
 // Функция закрытия окна с сообщением об успешной отправке по событию
-function onSuccesMessageCancel (evt) {
-  if (evt.target === cloneSuccess) {
+function onDocumentClick (evt) {
+  if (evt.target === successSection) {
     closeSuccessMessage();
   }
 }
 
 // Функция открытия окна с сообщением об успешной отправке
 function openSuccessMessage() {
-  document.body.appendChild(cloneSuccess);
-  document.addEventListener('keydown', onSuccessMessageEscKeydown);
+  document.body.appendChild(successSection);
+  document.addEventListener('keydown', onSuccessKeydown);
   successButton.addEventListener('click', closeSuccessMessage);
-  document.addEventListener('click', onSuccesMessageCancel);
+  document.addEventListener('click', onDocumentClick);
 }
 
 // Функция закрытия окна с сообщением об успешной отправке
 function closeSuccessMessage() {
-  document.body.removeChild(cloneSuccess);
-  document.removeEventListener('keydown', onSuccessMessageEscKeydown);
-  document.removeEventListener('click', onSuccesMessageCancel);
+  document.body.removeChild(successSection);
+  document.removeEventListener('keydown', onSuccessKeydown);
+  document.removeEventListener('click', onDocumentClick);
 }
 
 // Обработка ошибки отправки формы
 const errorTemplate = document.querySelector('#error').content;
-const cloneErrorFragment = errorTemplate.cloneNode(true);
-const cloneError = cloneErrorFragment.querySelector('.error');
-const errorButton = cloneError.querySelector('.error__button');
+const errorRoot = errorTemplate.cloneNode(true);
+const errorSection = errorRoot.querySelector('.error');
+const errorButton = errorSection.querySelector('.error__button');
 
 // Функция закрытия окна с сообщением об ошибке отправки по клавише 'Escape'
-function onErrorMessageEscKeydown (evt) {
-  closeByEscKeydown(closeErrorMessage, evt);
+function onErrorKeydown (evt) {
+  if (evt.key === 'Escape') {
+    closeErrorMessage();
+  }
 }
 
 // Функция закрытия окна с сообщением об ошибке отправки по событию
-function onErrorMessageCancel (evt) {
-  if (evt.target === cloneError) {
+function onErrorClick (evt) {
+  if (evt.target === errorSection) {
     closeErrorMessage();
   }
 }
 
 // Функция открытия окна с сообщением об ошибке отправки
 function openErrorMessage() {
-  document.body.appendChild(cloneError);
-  document.addEventListener('keydown', onErrorMessageEscKeydown);
+  document.body.appendChild(errorSection);
+  document.addEventListener('keydown', onErrorKeydown);
   errorButton.addEventListener('click', closeErrorMessage);
-  cloneError.style.zIndex = '100';
-  document.addEventListener('click', onErrorMessageCancel);
-  document.removeEventListener('keydown', onUploadCancelEscKeydown);
+  errorSection.style.zIndex = '100';
+  document.addEventListener('click', onErrorClick);
+  document.removeEventListener('keydown', onKeydown);
 }
 
 // Функция закрытия окна с сообщением об ошибке отправки
 function closeErrorMessage() {
-  document.body.removeChild(cloneError);
-  document.removeEventListener('keydown', onErrorMessageEscKeydown);
-  document.removeEventListener('click', onErrorMessageCancel);
-  document.addEventListener('keydown', onUploadCancelEscKeydown);
+  document.body.removeChild(errorSection);
+  document.removeEventListener('keydown', onErrorKeydown);
+  document.removeEventListener('click', onErrorClick);
+  document.addEventListener('keydown', onKeydown);
 }
 
 sendUserFormSubmit(closeForm);
-
-export { sendUserFormSubmit };
