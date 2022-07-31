@@ -2,7 +2,7 @@ import { resetScale } from './edit-new-photo.js';
 
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
 const descriptionInput = document.querySelector('.text__description');
-const textHashtags = document.querySelector('.text__hashtags');
+const hashtagsInput = document.querySelector('.text__hashtags');
 const uploadCancel = document.querySelector('#upload-cancel');
 const imgUploadInput = document.querySelector('.img-upload__input');
 const imgUploadPreview = document.querySelector('.img-upload__preview > img');
@@ -21,7 +21,7 @@ function closeForm() {
   resetScale();
   imgUploadInput.value = '';
   descriptionInput.value = '';
-  textHashtags.value = '';
+  hashtagsInput.value = '';
 
   document.removeEventListener('keydown', onKeydown);
 }
@@ -41,7 +41,7 @@ uploadCancel.addEventListener('click', () => {
 // Функция-обработчик закрытия формы редактирования изображения по нажатию на 'Escape'
 function onKeydown(evt) {
   // Если фокус находится в поле ввода комментария или хэш-тега, нажатие на Esc не приводит к закрытию формы редактирования изображения
-  if (descriptionInput === document.activeElement || textHashtags === document.activeElement) {
+  if (descriptionInput === document.activeElement || hashtagsInput === document.activeElement) {
     return evt;
   } else if (evt.key === 'Escape') {
     closeForm();

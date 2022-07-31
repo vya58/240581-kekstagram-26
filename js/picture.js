@@ -7,20 +7,18 @@ const pictureTemplate = document.querySelector('#picture').content;
 
 // Генерируем фотоминиатюры из шаблона  и сохраняем в DocumentFragment
 function renderGallery(photos, amount = NUMBER_OF_PHOTOS) {
+  photos.some((element, i) => {
+    if (i < amount) {
+      const clonedPicture = pictureTemplate.cloneNode(true);
 
-  for (let i = 0; i < photos.length; i++) {
-    if (i >= amount) {
-      break;
+      clonedPicture.querySelector('.picture__img').setAttribute('src', element.url);
+      clonedPicture.querySelector('.picture__img').setAttribute('alt', element.description);
+      clonedPicture.querySelector('.picture__comments').textContent = element.comments.length;
+      clonedPicture.querySelector('.picture__likes').textContent = element.likes;
+
+      picturesListFragment.appendChild(clonedPicture);
     }
-    const clonedPicture = pictureTemplate.cloneNode(true);
-
-    clonedPicture.querySelector('.picture__img').setAttribute('src', photos[i].url);
-    clonedPicture.querySelector('.picture__img').setAttribute('alt', photos[i].description);
-    clonedPicture.querySelector('.picture__comments').textContent = photos[i].comments.length;
-    clonedPicture.querySelector('.picture__likes').textContent = photos[i].likes;
-
-    picturesListFragment.appendChild(clonedPicture);
-  }
+  });
 
   // Очищаем страницу от старых фотоминиатюр
   const oldPictures = picturesContainer.querySelectorAll('.picture');

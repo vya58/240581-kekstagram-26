@@ -21,12 +21,7 @@ function validateHashtagSharpFirst(value) {
   const array = value.split(/\s+/);
   const symbol = '#';
 
-  for (const element of array) {
-    if (!(element === '' || element[0] === symbol)) {
-      return false;
-    }
-  }
-  return true;
+  return !array.some((element) => (element[0] !== symbol && element !== ''));
 }
 
 // Проверка, что хэш-тег состоит только из одного символа '#'
@@ -34,14 +29,7 @@ function validateHashtagSharpOnly(value) {
   const array = value.split(/\s+/);
   const symbol = '#';
 
-  for (const element of array) {
-    const hashtagsСount = getCountSymbol(element, symbol);
-
-    if (hashtagsСount === 1 && element.length === 1) {
-      return false;
-    }
-  }
-  return true;
+  return !array.some((element) => (getCountSymbol(element, symbol) === 1 && element.length === 1));
 }
 
 // Функция проверки количества символов # в отдельном хэш-теге
@@ -49,38 +37,21 @@ function validateHashtagSharpCount(value) {
   const array = value.split(/\s+/);
   const symbol = '#';
 
-  for (const element of array) {
-    const hashtagsСount = getCountSymbol(element, symbol);
-
-    if (hashtagsСount > 1 && element.length > 1) {
-      return false;
-    }
-  }
-  return true;
+  return !array.some((element) => (getCountSymbol(element, symbol) > 1 && element.length > 1));
 }
 
 // Функция проверки корректности введённых символов
 function validateHashtagCharacter(value) {
   const array = value.split(/\s+/);
 
-  for (const element of array) {
-    if (!(element === '' || re.test(element))) {
-      return false;
-    }
-  }
-  return true;
+  return !array.some((element) => (!re.test(element) && element !== ''));
 }
 
 // Функция проверки на максимальную длину хэш-тега
 function validateHashtagLength(value) {
   const array = value.split(/\s+/);
 
-  for (const element of array) {
-    if (element.length > MAX_HASHTAG_LENGTH) {
-      return false;
-    }
-  }
-  return true;
+  return !array.some((element) => (element.length > MAX_HASHTAG_LENGTH));
 }
 
 // Функция проверки на максимальное количество хэш-тегов

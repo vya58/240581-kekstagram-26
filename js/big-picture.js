@@ -49,12 +49,12 @@ function addСomments() {
   let openCommentsCount = comenntsElementsAll.length - comenntsElementsHidden.length;
 
   // Добавляем отображение скрытых комментариев в количестве, заданном константой 'ADD_COUNT_SHOW', но не более имеющегося остатка
-  for (let i = 0; i < ADD_COUNT_SHOW; i++) {
-    if (i < comenntsElementsHidden.length) {
-      comenntsElementsHidden[i].classList.remove('hidden');
+  comenntsElementsHidden.forEach((element, i) => {
+    if (i < ADD_COUNT_SHOW) {
+      element.classList.remove('hidden');
       openCommentsCount++;
     }
-  }
+  });
 
   // Изменяем число показанных комментариев в блоке '.social__comment-count'
   socialCommentCountFirstSpan.textContent = `${openCommentsCount} из `;
@@ -63,12 +63,7 @@ function addСomments() {
 
 // Функция получения порядкового номера элемента массива объектов фотоминиатюр по её id
 function getElementArrayNumber(arrayPictures, pictId) {
-  for (let i = 0; i < arrayPictures.length; i++) {
-    if ((arrayPictures[i].id + 1) === Number(pictId)) {
-      return i;
-    }
-  }
-
+  return arrayPictures.findIndex((element) => (element.id + 1) === Number(pictId));
 }
 
 // Функция генерации блоков комментариев к фотоминиатюре с соответствующим id и вставки их в разметку
@@ -120,6 +115,7 @@ function onListClick(photos) {
         const child = commentsBlock.children[i];
         child.parentElement.removeChild(child);
       }
+
       // Показываем окно полноразмерного изображения
       openBigPicture();
 

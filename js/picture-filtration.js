@@ -40,14 +40,13 @@ function listenRandomFilterClick(photos, renderPictures) {
 }
 
 // Функция-обработчик клика по фильтру 'Обсуждаемые'
-function onFilterDiscussionClick(photos, renderPictures) {
+function listenDiscussedFilterClick(photos, renderPictures) {
   filterDiscussed.addEventListener('click', (evt) => {
     changeActiveFilter(evt.target);
 
     const copiedPhotos = photos.slice();
 
     copiedPhotos.sort((a, b) => b.comments.length - a.comments.length);
-
     renderPictures(copiedPhotos);
   });
 }
@@ -56,7 +55,7 @@ function onFilterDiscussionClick(photos, renderPictures) {
 function initFilters(photos) {
   imgFiltersContainer.classList.remove('img-filters--inactive');
   listenDefaultFilterClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
-  onFilterDiscussionClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
+  listenDiscussedFilterClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
   listenRandomFilterClick(photos, debounce(renderGallery, TIMEOUT_DELAY));
 }
 
